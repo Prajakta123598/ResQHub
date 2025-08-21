@@ -1,1 +1,3 @@
 Hello Git!
+This line is added in feature-notes branch.
+
