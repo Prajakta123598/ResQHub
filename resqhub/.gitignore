@@ -1,0 +1,20 @@
+# Node / npm
+node_modules/
+npm-debug.log*
+
+# Logs
+logs/
+*.log
+
+# Build outputs
+dist/
+build/
+
+# Coverage / temp
+coverage/
+.tmp/
+
+# OS & editor junk
+.DS_Store
+Thumbs.db
+.vscode/
