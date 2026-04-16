@@ -1,4 +1,3 @@
-<<<<<<< HEAD
 # ResQHub 🚒🔥   
 
 ## 📌 Project Overview  
@@ -37,7 +36,3 @@ git clone https://github.com/Prajakta123598/ResQHub.git
 
 
 
-=======
-# ResQHub
-resqhub: A placement-ready full-stack MERN project demonstrating Git workflow, backend, frontend, Docker, and cloud deployment.
->>>>>>> 501a4940b593061b25438e0165ab40b47e8cf6aa
