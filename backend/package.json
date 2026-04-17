@@ -1,16 +1,14 @@
 {
   "name": "backend",
   "version": "1.0.0",
-  "description": "",
+  "description": "ResQHub Backend",
   "main": "index.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1",
     "start": "node index.js",
-    "dev": "nodemon index.js",
-    "server": "nodemon index.js"
+    "dev": "nodemon index.js"
   },
   "keywords": [],
-  "author": "",
+  "author": "Prajakta",
   "license": "ISC",
   "dependencies": {
     "bcryptjs": "^3.0.2",
