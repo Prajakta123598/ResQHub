@@ -1,6 +1,7 @@
 import { useState, useEffect } from "react";
 import axios from "axios";
 import { useParams } from "react-router-dom";
+import { API_URL } from "../config";
 
 const Expense = () => {
   const { travelRequestId } = useParams();
@@ -16,7 +17,7 @@ const Expense = () => {
   const fetchExpenses = async () => {
     try {
       const res = await axios.get(
-        `http://localhost:5000/api/expenses/${travelRequestId}`,
+        `${API_URL}/api/expenses/${travelRequestId}`,
         {
           headers: {
             Authorization: `Bearer ${token}`,
@@ -54,7 +55,7 @@ const Expense = () => {
 
     try {
       await axios.post(
-        "http://localhost:5000/api/expenses",
+        `${API_URL}/api/expenses`,
         {
           amount: Number(form.amount),
           title: form.description,
@@ -84,7 +85,7 @@ const Expense = () => {
   const handleDelete = async (expenseId) => {
     try {
       await axios.delete(
-        `http://localhost:5000/api/expenses/${expenseId}`,
+        `${API_URL}/api/expenses/${expenseId}`,
         {
           headers: {
             Authorization: `Bearer ${token}`,
@@ -107,9 +108,7 @@ const Expense = () => {
 
   return (
     <div className="p-6">
-      <h1 className="text-2xl font-bold mb-4">
-        Expenses
-      </h1>
+      <h1 className="text-2xl font-bold mb-4">Expenses</h1>
 
       <div className="bg-gray-100 p-3 rounded mb-4">
         <h2 className="text-lg font-semibold">
@@ -163,9 +162,7 @@ const Expense = () => {
             </div>
 
             <button
-              onClick={() =>
-                handleDelete(exp._id)
-              }
+              onClick={() => handleDelete(exp._id)}
               className="bg-red-500 text-white px-3 py-1 rounded"
             >
               Delete

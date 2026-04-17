@@ -1,5 +1,6 @@
 import { useState, useEffect } from "react";
 import axios from "axios";
+import { API_URL } from "../config";
 
 const Travel = () => {
   const [travels, setTravels] = useState([]);
@@ -15,14 +16,11 @@ const Travel = () => {
 
   const fetchTravels = async () => {
     try {
-      const res = await axios.get(
-        "http://localhost:5000/api/travels/my",
-        {
-          headers: {
-            Authorization: `Bearer ${token}`,
-          },
-        }
-      );
+      const res = await axios.get(`${API_URL}/api/travels/my`, {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      });
 
       if (Array.isArray(res.data)) {
         setTravels(res.data);
@@ -53,15 +51,11 @@ const Travel = () => {
     e.preventDefault();
 
     try {
-      await axios.post(
-        "http://localhost:5000/api/travels",
-        form,
-        {
-          headers: {
-            Authorization: `Bearer ${token}`,
-          },
-        }
-      );
+      await axios.post(`${API_URL}/api/travels`, form, {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      });
 
       alert("Travel created successfully!");
 
@@ -75,20 +69,14 @@ const Travel = () => {
 
       fetchTravels();
     } catch (error) {
-      console.error(
-        error.response?.data || error.message
-      );
-      alert(
-        JSON.stringify(error.response?.data)
-      );
+      console.error(error.response?.data || error.message);
+      alert(JSON.stringify(error.response?.data));
     }
   };
 
   return (
     <div className="p-6">
-      <h1 className="text-2xl font-bold mb-4">
-        Travel Requests
-      </h1>
+      <h1 className="text-2xl font-bold mb-4">Travel Requests</h1>
 
       <form
         onSubmit={handleSubmit}
@@ -150,32 +138,22 @@ const Travel = () => {
         </button>
       </form>
 
-      {!Array.isArray(travels) ||
-      travels.length === 0 ? (
+      {!Array.isArray(travels) || travels.length === 0 ? (
         <p>No travel data found</p>
       ) : (
         travels.map((t) => (
-          <div
-            key={t._id}
-            className="border p-3 mb-2 rounded"
-          >
-            <h2 className="font-semibold">
-              {t.title}
-            </h2>
+          <div key={t._id} className="border p-3 mb-2 rounded">
+            <h2 className="font-semibold">{t.title}</h2>
             <p>{t.purpose}</p>
             <p>
-              <strong>Destination:</strong>{" "}
-              {t.destination}
+              <strong>Destination:</strong> {t.destination}
             </p>
             <p>
-              {t.fromDate?.slice(0, 10)} →{" "}
-              {t.toDate?.slice(0, 10)}
+              {t.fromDate?.slice(0, 10)} → {t.toDate?.slice(0, 10)}
             </p>
 
             <button
-              onClick={() =>
-                (window.location.href = `/expenses/${t._id}`)
-              }
+              onClick={() => (window.location.href = `/expenses/${t._id}`)}
               className="bg-green-500 text-white px-2 py-1 rounded mt-2"
             >
               View Expenses

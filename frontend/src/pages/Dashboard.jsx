@@ -1,5 +1,6 @@
 import { useState, useEffect } from "react";
 import axios from "axios";
+import { API_URL } from "../config";
 
 const Dashboard = () => {
   const [travels, setTravels] = useState([]);
@@ -13,7 +14,7 @@ const Dashboard = () => {
 
       for (const travel of travelList) {
         const res = await axios.get(
-          `http://localhost:5000/api/expenses/${travel._id}`,
+          `${API_URL}/api/expenses/${travel._id}`,
           {
             headers: {
               Authorization: `Bearer ${token}`,
@@ -24,10 +25,7 @@ const Dashboard = () => {
         if (Array.isArray(res.data)) {
           allExpenses = [...allExpenses, ...res.data];
         } else if (Array.isArray(res.data.expenses)) {
-          allExpenses = [
-            ...allExpenses,
-            ...res.data.expenses,
-          ];
+          allExpenses = [...allExpenses, ...res.data.expenses];
         }
       }
 
@@ -41,18 +39,13 @@ const Dashboard = () => {
   useEffect(() => {
     const loadData = async () => {
       try {
-        const res = await axios.get(
-          "http://localhost:5000/api/travels/my",
-          {
-            headers: {
-              Authorization: `Bearer ${token}`,
-            },
-          }
-        );
+        const res = await axios.get(`${API_URL}/api/travels/my`, {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        });
 
-        const travelList = Array.isArray(res.data)
-          ? res.data
-          : [];
+        const travelList = Array.isArray(res.data) ? res.data : [];
 
         setTravels(travelList);
 
@@ -76,36 +69,22 @@ const Dashboard = () => {
 
   return (
     <div className="p-6">
-      <h1 className="text-2xl font-bold mb-6">
-        Dashboard
-      </h1>
+      <h1 className="text-2xl font-bold mb-6">Dashboard</h1>
 
       <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
         <div className="bg-blue-100 p-6 rounded shadow">
-          <h2 className="text-lg font-semibold">
-            Total Travels
-          </h2>
-          <p className="text-3xl font-bold mt-2">
-            {totalTravels}
-          </p>
+          <h2 className="text-lg font-semibold">Total Travels</h2>
+          <p className="text-3xl font-bold mt-2">{totalTravels}</p>
         </div>
 
         <div className="bg-green-100 p-6 rounded shadow">
-          <h2 className="text-lg font-semibold">
-            Total Expenses
-          </h2>
-          <p className="text-3xl font-bold mt-2">
-            {totalExpenses}
-          </p>
+          <h2 className="text-lg font-semibold">Total Expenses</h2>
+          <p className="text-3xl font-bold mt-2">{totalExpenses}</p>
         </div>
 
         <div className="bg-yellow-100 p-6 rounded shadow">
-          <h2 className="text-lg font-semibold">
-            Total Amount
-          </h2>
-          <p className="text-3xl font-bold mt-2">
-            ₹{totalAmount}
-          </p>
+          <h2 className="text-lg font-semibold">Total Amount</h2>
+          <p className="text-3xl font-bold mt-2">₹{totalAmount}</p>
         </div>
       </div>
     </div>

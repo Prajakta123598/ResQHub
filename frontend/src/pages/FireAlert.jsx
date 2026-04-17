@@ -1,5 +1,6 @@
 import { useState, useEffect } from "react";
 import axios from "axios";
+import { API_URL } from "../config";
 
 const FireAlert = () => {
   const [alerts, setAlerts] = useState([]);
@@ -13,18 +14,13 @@ const FireAlert = () => {
 
   const fetchAlerts = async () => {
     try {
-      const res = await axios.get(
-        "http://localhost:5000/api/alerts/my",
-        {
-          headers: {
-            Authorization: `Bearer ${token}`,
-          },
-        }
-      );
+      const res = await axios.get(`${API_URL}/api/alerts/my`, {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      });
 
-      setAlerts(
-        Array.isArray(res.data) ? res.data : []
-      );
+      setAlerts(Array.isArray(res.data) ? res.data : []);
     } catch (error) {
       console.error(error);
       setAlerts([]);
@@ -47,15 +43,11 @@ const FireAlert = () => {
     e.preventDefault();
 
     try {
-      await axios.post(
-        "http://localhost:5000/api/alerts",
-        form,
-        {
-          headers: {
-            Authorization: `Bearer ${token}`,
-          },
-        }
-      );
+      await axios.post(`${API_URL}/api/alerts`, form, {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      });
 
       alert("Fire Alert sent successfully!");
 
@@ -74,9 +66,7 @@ const FireAlert = () => {
 
   return (
     <div className="p-6">
-      <h1 className="text-2xl font-bold mb-4">
-        Fire Alerts
-      </h1>
+      <h1 className="text-2xl font-bold mb-4">Fire Alerts</h1>
 
       <form
         onSubmit={handleSubmit}
@@ -125,10 +115,7 @@ const FireAlert = () => {
         <p>No alerts found</p>
       ) : (
         alerts.map((alert) => (
-          <div
-            key={alert._id}
-            className="border p-3 mb-2 rounded"
-          >
+          <div key={alert._id} className="border p-3 mb-2 rounded">
             <p>{alert.location}</p>
             <p>{alert.message}</p>
             <p>{alert.severity}</p>

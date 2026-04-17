@@ -1,5 +1,6 @@
 import { useState, useEffect } from "react";
 import axios from "axios";
+import { API_URL } from "../config";
 
 const AdminAlerts = () => {
   const [alerts, setAlerts] = useState([]);
@@ -8,18 +9,13 @@ const AdminAlerts = () => {
 
   const fetchAlerts = async () => {
     try {
-      const res = await axios.get(
-        "http://localhost:5000/api/alerts",
-        {
-          headers: {
-            Authorization: `Bearer ${token}`,
-          },
-        }
-      );
+      const res = await axios.get(`${API_URL}/api/alerts`, {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      });
 
-      setAlerts(
-        Array.isArray(res.data) ? res.data : []
-      );
+      setAlerts(Array.isArray(res.data) ? res.data : []);
     } catch (error) {
       console.error(error);
       setAlerts([]);
@@ -34,7 +30,7 @@ const AdminAlerts = () => {
   const handleResolve = async (id) => {
     try {
       await axios.put(
-        `http://localhost:5000/api/alerts/${id}/resolve`,
+        `${API_URL}/api/alerts/${id}/resolve`,
         {},
         {
           headers: {
@@ -66,30 +62,24 @@ const AdminAlerts = () => {
             className="border p-3 mb-3 rounded"
           >
             <p>
-              <strong>User:</strong>{" "}
-              {alert.user?.name}
+              <strong>User:</strong> {alert.user?.name}
             </p>
 
             <p>
-              <strong>Location:</strong>{" "}
-              {alert.location}
+              <strong>Location:</strong> {alert.location}
             </p>
 
             <p>
-              <strong>Message:</strong>{" "}
-              {alert.message}
+              <strong>Message:</strong> {alert.message}
             </p>
 
             <p>
-              <strong>Status:</strong>{" "}
-              {alert.status}
+              <strong>Status:</strong> {alert.status}
             </p>
 
             {alert.status === "active" && (
               <button
-                onClick={() =>
-                  handleResolve(alert._id)
-                }
+                onClick={() => handleResolve(alert._id)}
                 className="bg-green-500 text-white px-3 py-1 rounded mt-2"
               >
                 Resolve

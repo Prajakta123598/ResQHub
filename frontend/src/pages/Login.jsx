@@ -1,5 +1,6 @@
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
+import { API_URL } from "../config";
 
 function Login() {
   const [email, setEmail] = useState("");
@@ -11,19 +12,16 @@ function Login() {
     e.preventDefault();
 
     try {
-      const res = await fetch(
-        "http://localhost:5000/api/users/login",
-        {
-          method: "POST",
-          headers: {
-            "Content-Type": "application/json",
-          },
-          body: JSON.stringify({
-            email,
-            password,
-          }),
-        }
-      );
+      const res = await fetch(`${API_URL}/api/users/login`, {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+          email,
+          password,
+        }),
+      });
 
       const data = await res.json();
 
@@ -32,7 +30,6 @@ function Login() {
 
         alert("Login Successful ✅");
 
-        // redirect after login
         navigate("/dashboard");
       } else {
         alert(data.message || "Login failed ❌");
@@ -48,18 +45,14 @@ function Login() {
         onSubmit={handleLogin}
         className="bg-white p-6 rounded shadow w-80"
       >
-        <h2 className="text-xl font-bold mb-4">
-          Login 🔐
-        </h2>
+        <h2 className="text-xl font-bold mb-4">Login 🔐</h2>
 
         <input
           type="email"
           placeholder="Email"
           className="w-full p-2 border mb-3"
           value={email}
-          onChange={(e) =>
-            setEmail(e.target.value)
-          }
+          onChange={(e) => setEmail(e.target.value)}
           required
         />
 
@@ -68,9 +61,7 @@ function Login() {
           placeholder="Password"
           className="w-full p-2 border mb-3"
           value={password}
-          onChange={(e) =>
-            setPassword(e.target.value)
-          }
+          onChange={(e) => setPassword(e.target.value)}
           required
         />
 
