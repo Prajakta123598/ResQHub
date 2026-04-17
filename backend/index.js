@@ -1,4 +1,5 @@
 require("dotenv").config();
+
 const express = require("express");
 const cors = require("cors");
 const mongoose = require("mongoose");
@@ -12,6 +13,14 @@ const fireAlertRoutes = require("./routes/fireAlertRoutes");
 
 const app = express();
 const PORT = process.env.PORT || 5000;
+
+// 🔍 ENV CHECK
+console.log("🔍 ENV CHECK:", {
+  MONGO_URI: !!process.env.MONGO_URI,
+  JWT_SECRET: !!process.env.JWT_SECRET,
+  NODE_ENV: process.env.NODE_ENV,
+  PORT: process.env.PORT,
+});
 
 // ✅ Middlewares
 app.use(cors());
@@ -44,37 +53,36 @@ app.get("/api/test", async (req, res) => {
   }
 });
 
-// ✅ Mount routes
+// ✅ Routes
 app.use("/api/users", userRoutes);
 app.use("/api/travels", travelRoutes);
 app.use("/api/expenses", expenseRoutes);
 app.use("/api/alerts", fireAlertRoutes);
 
-// ✅ 404 handler
-app.use((req, res, next) => {
+// ✅ 404
+app.use((req, res) => {
   res.status(404).json({ message: "Route not found" });
 });
 
-// ✅ Global error handler
+// ✅ Error handler
 app.use((err, req, res, next) => {
-  const statusCode = res.statusCode === 200 ? 500 : res.statusCode;
-
-  res.status(statusCode).json({
+  res.status(res.statusCode || 500).json({
     success: false,
     message: err.message,
-    stack: process.env.NODE_ENV === "production" ? null : err.stack,
   });
 });
 
-// ✅ Start server after DB connection
+// ✅ Start server
 const startServer = async () => {
   try {
     await connectDB();
+
     app.listen(PORT, () => {
-      console.log(`✅ Server running on port ${PORT}`);
+      console.log(`🚀 Server running on port ${PORT}`);
     });
   } catch (error) {
-    console.error("❌ Server failed to start:", error.message);
+    console.error("❌ Server failed to start:");
+    console.error(error);
     process.exit(1);
   }
 };
