@@ -8,7 +8,7 @@ const connectDB = require("./config/db");
 const userRoutes = require("./routes/userRoutes");
 const travelRoutes = require("./routes/travelRoutes");
 const expenseRoutes = require("./routes/expenseRoutes");
-const fireAlertRoutes = require("./routes/fireAlertRoutes"); // 🚨 NEW
+const fireAlertRoutes = require("./routes/fireAlertRoutes");
 
 const app = express();
 const PORT = process.env.PORT || 5000;
@@ -48,7 +48,7 @@ app.get("/api/test", async (req, res) => {
 app.use("/api/users", userRoutes);
 app.use("/api/travels", travelRoutes);
 app.use("/api/expenses", expenseRoutes);
-app.use("/api/alerts", fireAlertRoutes); // 🚨 NEW ROUTE
+app.use("/api/alerts", fireAlertRoutes);
 
 // ✅ 404 handler
 app.use((req, res, next) => {
@@ -62,18 +62,21 @@ app.use((err, req, res, next) => {
   res.status(statusCode).json({
     success: false,
     message: err.message,
-    stack:
-      process.env.NODE_ENV === "production"
-        ? null
-        : err.stack,
+    stack: process.env.NODE_ENV === "production" ? null : err.stack,
   });
 });
 
 // ✅ Start server after DB connection
-connectDB().then(() => {
-  app.listen(PORT, () => {
-    console.log(
-      `✅ Server running on http://localhost:${PORT}`
-    );
-  });
-});
+const startServer = async () => {
+  try {
+    await connectDB();
+    app.listen(PORT, () => {
+      console.log(`✅ Server running on port ${PORT}`);
+    });
+  } catch (error) {
+    console.error("❌ Server failed to start:", error.message);
+    process.exit(1);
+  }
+};
+
+startServer();
