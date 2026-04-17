@@ -1,43 +1,61 @@
-<<<<<<< HEAD
-# ResQHub 🚒🔥   
+# 🚀 ResQHub – Emergency & Travel Management System
 
-## 📌 Project Overview  
-ResQHub is a smart fire and accident detection system. It can:  
-- Detect fire and accidents using sensors.  
-- Send automatic alerts/notifications.  
-- Provide quick response through an emergency vehicle module.  
+ResQHub is a full-stack MERN application designed to manage travel requests, track expenses, and handle fire alert emergencies with an admin dashboard.
 
-This project is built to **save lives by enabling faster detection and response** in case of emergencies.  
+🌐 **Live Demo:** https://res-q-hub-three.vercel.app/
 
 ---
 
-## ⚙️ Features  
-- 🔥 Fire Detection (using flame & smoke sensors)  
-- 🚗 Accident Detection (using impact & tilt sensors)  
-- 📡 Automatic Alert System (via IoT + Cloud)  
-- 📱 Dashboard for monitoring incidents  
-- 🤖 Fire-Extinguisher Vehicle (prototype)  
+## 📌 Features
+
+### 🔐 Authentication
+- User Registration & Login (JWT based)
+- Protected Routes
+
+### 🧳 Travel Management
+- Create travel requests
+- View personal travel history
+
+### 💰 Expense Tracking
+- Add expenses to each travel
+- Delete expenses
+- Total expense calculation
+
+### 🚨 Fire Alert System
+- Send fire alerts with severity levels
+- Track alert status
+
+### 🧑‍💼 Admin Dashboard
+- View all alerts
+- Resolve active alerts
 
 ---
 
-## 🛠️ Tech Stack  
-- **Hardware**: ESP32, Flame Sensor, Smoke Sensor, Accelerometer  
-- **Software**: Arduino IDE, Python  
-- **Cloud / Backend**: Firebase (or custom API)  
-- **Frontend**: React.js / Dashboard  
-- **Version Control**: Git & GitHub  
+## 🛠️ Tech Stack
+
+### Frontend
+- React.js
+- Tailwind CSS
+- Axios
+- React Router
+
+### Backend
+- Node.js
+- Express.js
+
+### Database
+- MongoDB Atlas
+
+### Deployment
+- Frontend: Vercel
+- Backend: Render
 
 ---
 
-## 🚀 Getting Started  
-### Clone this repo  
-```bash
-git clone https://github.com/Prajakta123598/ResQHub.git
+## 📂 Project Structure
 
-
-
-
-=======
-# ResQHub
-resqhub: A placement-ready full-stack MERN project demonstrating Git workflow, backend, frontend, Docker, and cloud deployment.
->>>>>>> 501a4940b593061b25438e0165ab40b47e8cf6aa
+```text
+resqhub/
+ ├── backend/
+ ├── frontend/
+ ├── README.md
