@@ -77,27 +77,26 @@ const Expense = () => {
 
       fetchExpenses();
     } catch (error) {
-      console.error(error);
-      alert("Error adding expense");
+      console.error("ADD ERROR:", error.response?.data || error.message);
+      alert(error.response?.data?.message || "Error adding expense");
     }
   };
 
   const handleDelete = async (expenseId) => {
     try {
-      await axios.delete(
-        `${API_URL}/api/expenses/${expenseId}`,
-        {
-          headers: {
-            Authorization: `Bearer ${token}`,
-          },
-        }
-      );
+      console.log("Deleting expense:", expenseId);
+
+      await axios.delete(`${API_URL}/api/expenses/${expenseId}`, {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      });
 
       alert("Expense deleted successfully!");
       fetchExpenses();
     } catch (error) {
-      console.error(error);
-      alert("Error deleting expense");
+      console.error("DELETE ERROR:", error.response?.data || error.message);
+      alert(error.response?.data?.message || "Error deleting expense");
     }
   };
 
