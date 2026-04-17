@@ -1,5 +1,6 @@
 import { useState, useEffect } from "react";
 import axios from "axios";
+import { useNavigate } from "react-router-dom";
 import { API_URL } from "../config";
 
 const Travel = () => {
@@ -13,6 +14,7 @@ const Travel = () => {
   });
 
   const token = localStorage.getItem("token");
+  const navigate = useNavigate();
 
   const fetchTravels = async () => {
     try {
@@ -153,7 +155,7 @@ const Travel = () => {
             </p>
 
             <button
-              onClick={() => (window.location.href = `/expenses/${t._id}`)}
+              onClick={() => navigate(`/expenses/${t._id}`)}
               className="bg-green-500 text-white px-2 py-1 rounded mt-2"
             >
               View Expenses
