@@ -1,4 +1,5 @@
 const express = require("express");
+
 const router = express.Router();
 
 const {
@@ -13,12 +14,24 @@ const {
   admin,
 } = require("../middleware/authMiddleware");
 
-// User routes
+// ==================================================
+// USER ROUTES
+// ==================================================
+
+// Create fire alert
 router.post("/", protect, createAlert);
+
+// Get logged-in user's alerts
 router.get("/my", protect, getMyAlerts);
 
-// Admin routes
+// ==================================================
+// ADMIN ROUTES
+// ==================================================
+
+// Get all fire alerts
 router.get("/", protect, admin, getAllAlerts);
+
+// Resolve fire alert
 router.put("/:id/resolve", protect, admin, resolveAlert);
 
 module.exports = router;

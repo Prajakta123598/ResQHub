@@ -7,19 +7,25 @@ const fireAlertSchema = new mongoose.Schema(
       ref: "User",
       required: true,
     },
+
     location: {
       type: String,
       required: true,
+      trim: true,
     },
+
     message: {
       type: String,
       required: true,
+      trim: true,
     },
+
     severity: {
       type: String,
       enum: ["low", "medium", "high"],
       default: "medium",
     },
+
     status: {
       type: String,
       enum: ["active", "resolved"],

@@ -1,4 +1,5 @@
 import { BrowserRouter, Routes, Route } from "react-router-dom";
+
 import Navbar from "./components/Navbar";
 
 import Home from "./pages/Home";
@@ -19,12 +20,16 @@ function App() {
 
       <div className="p-6">
         <Routes>
-          {/* Public */}
+          {/* PUBLIC ROUTES */}
+
           <Route path="/" element={<Home />} />
+
           <Route path="/login" element={<Login />} />
+
           <Route path="/register" element={<Register />} />
 
-          {/* Protected */}
+          {/* PROTECTED ROUTES */}
+
           <Route
             path="/dashboard"
             element={
@@ -61,14 +66,20 @@ function App() {
             }
           />
 
+          {/* ADMIN CONTROL */}
+
           <Route
             path="/admin-alerts"
             element={
-              <ProtectedRoute>
+              <ProtectedRoute adminOnly={true}>
                 <AdminAlerts />
               </ProtectedRoute>
             }
           />
+
+          {/* FALLBACK */}
+
+          <Route path="*" element={<Home />} />
         </Routes>
       </div>
     </BrowserRouter>

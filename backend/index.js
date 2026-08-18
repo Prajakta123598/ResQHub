@@ -1,20 +1,26 @@
-require("dotenv").config();
-
 const express = require("express");
-const cors = require("cors");
 const mongoose = require("mongoose");
-const connectDB = require("./config/db");
+const cors = require("cors");
+const dotenv = require("dotenv");
 
-// ✅ Import routes
-const userRoutes = require("./routes/userRoutes");
-const travelRoutes = require("./routes/travelRoutes");
-const expenseRoutes = require("./routes/expenseRoutes");
-const fireAlertRoutes = require("./routes/fireAlertRoutes");
+dotenv.config();
 
 const app = express();
-const PORT = process.env.PORT || 5000;
 
-// 🔍 ENV CHECK
+// =========================
+// MIDDLEWARE
+// =========================
+
+app.use(cors());
+
+app.use(express.json());
+
+app.use(express.urlencoded({ extended: true }));
+
+// =========================
+// ENV CHECK
+// =========================
+
 console.log("🔍 ENV CHECK:", {
   MONGO_URI: !!process.env.MONGO_URI,
   JWT_SECRET: !!process.env.JWT_SECRET,
@@ -22,69 +28,85 @@ console.log("🔍 ENV CHECK:", {
   PORT: process.env.PORT,
 });
 
-// ✅ Middlewares
-app.use(cors());
-app.use(express.json());
+// =========================
+// ROUTES
+// =========================
 
-// ✅ Test root route
-app.get("/", (req, res) => {
-  res.send("🚀 ResQHub Backend is running!");
-});
+const userRoutes = require("./routes/userRoutes");
+const travelRoutes = require("./routes/travelRoutes");
+const expenseRoutes = require("./routes/expenseRoutes");
+const fireAlertRoutes = require("./routes/fireAlertRoutes");
 
-// ✅ Health check
-app.get("/api/hello", (req, res) => {
-  res.json({ message: "Hello from backend 👋" });
-});
+// =========================
+// API ROUTES
+// =========================
 
-// ✅ MongoDB Test Route
-app.get("/api/test", async (req, res) => {
-  try {
-    const dbs = await mongoose.connection.db.admin().listDatabases();
-
-    res.json({
-      message: "✅ MongoDB connected successfully!",
-      databases: dbs.databases.map((db) => db.name),
-    });
-  } catch (error) {
-    res.status(500).json({
-      message: "❌ MongoDB test failed",
-      error: error.message,
-    });
-  }
-});
-
-// ✅ Routes
 app.use("/api/users", userRoutes);
+
 app.use("/api/travels", travelRoutes);
+
 app.use("/api/expenses", expenseRoutes);
+
 app.use("/api/alerts", fireAlertRoutes);
 
-// ✅ 404
-app.use((req, res) => {
-  res.status(404).json({ message: "Route not found" });
-});
+// =========================
+// BASIC ROUTES
+// =========================
 
-// ✅ Error handler
-app.use((err, req, res, next) => {
-  res.status(res.statusCode || 500).json({
-    success: false,
-    message: err.message,
+app.get("/", (req, res) => {
+  res.json({
+    message: "🚀 ResQHub Backend is running!",
   });
 });
 
-// ✅ Start server
-const startServer = async () => {
-  try {
-    await connectDB();
+app.get("/api/hello", (req, res) => {
+  res.json({
+    message: "Hello from ResQHub Backend 👋",
+  });
+});
+
+// =========================
+// 404 ROUTE
+// =========================
+
+app.use((req, res) => {
+  res.status(404).json({
+    success: false,
+    message: "Route not found",
+  });
+});
+
+// =========================
+// ERROR HANDLER
+// =========================
+
+app.use((err, req, res, next) => {
+  console.error("❌ ERROR:", err);
+
+  const statusCode = res.statusCode !== 200 ? res.statusCode : 500;
+
+  res.status(statusCode).json({
+    success: false,
+    message: err.message || "Server Error",
+  });
+});
+
+// =========================
+// MONGODB + SERVER
+// =========================
+
+const PORT = process.env.PORT || 5000;
+
+mongoose
+  .connect(process.env.MONGO_URI)
+  .then(() => {
+    console.log("✅ MongoDB Connected:", mongoose.connection.host);
 
     app.listen(PORT, () => {
       console.log(`🚀 Server running on port ${PORT}`);
     });
-  } catch (error) {
-    console.error("❌ Server failed to start:");
-    console.error(error);
+  })
+  .catch((error) => {
+    console.error("❌ MongoDB Connection Failed:", error.message);
     process.exit(1);
-  }
-};
-
-startServer();
+  });

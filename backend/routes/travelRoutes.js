@@ -11,27 +11,38 @@ const {
   changeStatus,
 } = require("../controllers/travelController");
 
-const { protect, admin } = require("../middleware/authMiddleware"); // ✅ use 'admin' as defined
+const {
+  protect,
+  admin,
+} = require("../middleware/authMiddleware");
 
-// Create travel (logged-in user)
+
+// Create travel
 router.post("/", protect, createTravel);
+
 
 // Get logged-in user's travels
 router.get("/my", protect, getMyTravels);
 
-// Get all travels (admin only)
+
+// Admin - get all travels
 router.get("/", protect, admin, getAllTravels);
 
-// Get single travel by ID
+
+// Admin - approve/reject travel
+router.put("/:id/status", protect, admin, changeStatus);
+
+
+// Get single travel
 router.get("/:id", protect, getTravelById);
 
-// Update travel (owner or admin)
+
+// Update travel
 router.put("/:id", protect, updateTravel);
 
-// Delete travel (owner or admin)
+
+// Delete travel
 router.delete("/:id", protect, deleteTravel);
 
-// Admin change status
-router.put("/:id/status", protect, admin, changeStatus);
 
 module.exports = router;

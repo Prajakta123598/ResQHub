@@ -18,6 +18,11 @@ const travelRequestSchema = new mongoose.Schema(
       required: true,
     },
 
+    destination: {
+      type: String,
+      required: true,
+    },
+
     fromDate: {
       type: Date,
       required: true,
@@ -33,10 +38,18 @@ const travelRequestSchema = new mongoose.Schema(
       enum: ["Pending", "Approved", "Rejected"],
       default: "Pending",
     },
+
+    adminNote: {
+      type: String,
+      default: "",
+    },
   },
   {
     timestamps: true,
   }
 );
 
-module.exports = mongoose.model("TravelRequest", travelRequestSchema);
+module.exports = mongoose.model(
+  "TravelRequest",
+  travelRequestSchema
+);

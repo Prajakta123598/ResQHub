@@ -1,5 +1,6 @@
 const express = require("express");
-const { protect } = require("../middleware/authMiddleware");
+const router = express.Router();
+
 const {
   addExpense,
   getExpensesByTravel,
@@ -7,18 +8,38 @@ const {
   deleteExpense,
 } = require("../controllers/expenseController");
 
-const router = express.Router();
+const { protect } = require("../middleware/authMiddleware");
 
-// ➕ Add new expense
+// ==========================================
+// ADD EXPENSE
+// POST /api/expenses
+// ==========================================
+
 router.post("/", protect, addExpense);
 
-// 📂 Get all expenses for a specific travel request
-router.get("/:travelRequestId", protect, getExpensesByTravel);
+// ==========================================
+// GET EXPENSES BY TRAVEL ID
+// GET /api/expenses/travel/:travelRequestId
+// ==========================================
 
-// ✏️ Update expense
+router.get(
+  "/travel/:travelRequestId",
+  protect,
+  getExpensesByTravel
+);
+
+// ==========================================
+// UPDATE EXPENSE
+// PUT /api/expenses/:id
+// ==========================================
+
 router.put("/:id", protect, updateExpense);
 
-// ❌ Delete expense
+// ==========================================
+// DELETE EXPENSE
+// DELETE /api/expenses/:id
+// ==========================================
+
 router.delete("/:id", protect, deleteExpense);
 
 module.exports = router;
