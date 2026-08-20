@@ -9,7 +9,6 @@ const Expense = () => {
   // ==========================================
 
   const { travelRequestId } = useParams();
-
   const navigate = useNavigate();
 
   // ==========================================
@@ -41,7 +40,7 @@ const Expense = () => {
   };
 
   // ==========================================
-  // CHECK IF TRAVEL IS APPROVED
+  // CHECK TRAVEL STATUS
   // ==========================================
 
   const isApproved =
@@ -56,44 +55,37 @@ const Expense = () => {
   // ==========================================
 
   const fetchTravel = async () => {
-    try {
-      const res = await axios.get(
-        `${API_URL}/api/travels/${travelRequestId}`,
-        {
-          headers: authHeaders,
-        }
-      );
+    const res = await axios.get(
+      `${API_URL}/api/travels/${travelRequestId}`,
+      {
+        headers: authHeaders,
+      }
+    );
 
-      setTravel(res.data);
+    setTravel(res.data);
 
-      return res.data;
-    } catch (error) {
-      console.error(
-        "Fetch travel error:",
-        error.response?.data || error.message
-      );
-
-      throw error;
-    }
+    return res.data;
   };
 
   // ==========================================
   // FETCH EXPENSES
-  // GET /api/expenses/:travelRequestId
+  // GET /api/expenses/travel/:travelRequestId
   // ==========================================
 
   const fetchExpenses = async () => {
     try {
       const res = await axios.get(
-        `${API_URL}/api/expenses/${travelRequestId}`,
+        `${API_URL}/api/expenses/travel/${travelRequestId}`,
         {
           headers: authHeaders,
         }
       );
 
+      console.log("Fetched expenses:", res.data);
+
       if (Array.isArray(res.data)) {
         setExpenses(res.data);
-      } else if (Array.isArray(res.data.expenses)) {
+      } else if (Array.isArray(res.data?.expenses)) {
         setExpenses(res.data.expenses);
       } else {
         setExpenses([]);
@@ -103,17 +95,6 @@ const Expense = () => {
         "Fetch expenses error:",
         error.response?.data || error.message
       );
-
-      // Rejected travel ke case me alert spam nahi hoga
-      if (
-        error.response?.data?.message !==
-        "Expenses are not available for rejected travel requests"
-      ) {
-        alert(
-          error.response?.data?.message ||
-            "Failed to fetch expenses"
-        );
-      }
 
       setExpenses([]);
     }
@@ -138,6 +119,11 @@ const Expense = () => {
         setExpenses([]);
       }
     } catch (error) {
+      console.error(
+        "Load data error:",
+        error.response?.data || error.message
+      );
+
       alert(
         error.response?.data?.message ||
           "Failed to load travel details"
@@ -179,7 +165,6 @@ const Expense = () => {
   const handleSubmit = async (e) => {
     e.preventDefault();
 
-    // Frontend protection
     if (!isApproved) {
       alert(
         "Expenses can only be managed after the travel request is approved"
@@ -211,7 +196,7 @@ const Expense = () => {
         const res = await axios.put(
           `${API_URL}/api/expenses/${editingId}`,
           {
-            title: form.title,
+            title: form.title.trim(),
             amount: Number(form.amount),
           },
           {
@@ -241,7 +226,7 @@ const Expense = () => {
           `${API_URL}/api/expenses`,
           {
             travelRequest: travelRequestId,
-            title: form.title,
+            title: form.title.trim(),
             amount: Number(form.amount),
           },
           {
@@ -296,7 +281,7 @@ const Expense = () => {
 
     setForm({
       title: expense.title || "",
-      amount: expense.amount || "",
+      amount: expense.amount ?? "",
     });
 
     window.scrollTo({
@@ -617,18 +602,14 @@ const Expense = () => {
           <div className="mb-6">
 
             <h2 className="text-2xl font-bold">
-
               {editingId
                 ? "✏️ Update Expense"
                 : "➕ Add New Expense"}
-
             </h2>
 
             <p className="text-gray-500 mt-1">
-
               Add travel, food, accommodation,
               or other expenses.
-
             </p>
 
           </div>
@@ -690,7 +671,6 @@ const Expense = () => {
               </button>
 
               {editingId && (
-
                 <button
                   type="button"
                   onClick={cancelEdit}
@@ -698,7 +678,6 @@ const Expense = () => {
                 >
                   Cancel
                 </button>
-
               )}
 
             </div>
@@ -792,10 +771,7 @@ const Expense = () => {
 
                     </div>
 
-                    {/* ACTIONS ONLY IF APPROVED */}
-
                     {isApproved && (
-
                       <div className="flex gap-2">
 
                         <button
@@ -822,7 +798,6 @@ const Expense = () => {
                         </button>
 
                       </div>
-
                     )}
 
                   </div>

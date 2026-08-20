@@ -1,4 +1,5 @@
 const express = require("express");
+
 const router = express.Router();
 
 const {
@@ -10,17 +11,19 @@ const {
 
 const { protect } = require("../middleware/authMiddleware");
 
-// ==========================================
+// ==================================================
 // ADD EXPENSE
 // POST /api/expenses
-// ==========================================
+// ==================================================
 
 router.post("/", protect, addExpense);
 
-// ==========================================
+// ==================================================
 // GET EXPENSES BY TRAVEL ID
+// Supports both URLs:
 // GET /api/expenses/travel/:travelRequestId
-// ==========================================
+// GET /api/expenses/:travelRequestId
+// ==================================================
 
 router.get(
   "/travel/:travelRequestId",
@@ -28,17 +31,23 @@ router.get(
   getExpensesByTravel
 );
 
-// ==========================================
+router.get(
+  "/:travelRequestId",
+  protect,
+  getExpensesByTravel
+);
+
+// ==================================================
 // UPDATE EXPENSE
 // PUT /api/expenses/:id
-// ==========================================
+// ==================================================
 
 router.put("/:id", protect, updateExpense);
 
-// ==========================================
+// ==================================================
 // DELETE EXPENSE
 // DELETE /api/expenses/:id
-// ==========================================
+// ==================================================
 
 router.delete("/:id", protect, deleteExpense);
 
