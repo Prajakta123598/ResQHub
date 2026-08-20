@@ -11,7 +11,26 @@ const app = express();
 // MIDDLEWARE
 // =========================
 
-app.use(cors());
+const allowedOrigins = [
+  "http://localhost:5173",
+  "https://res-q-hub-three.vercel.app",
+];
+
+app.use(
+  cors({
+    origin: function (origin, callback) {
+      // Allow requests with no origin (Postman, server-to-server, etc.)
+      if (!origin || allowedOrigins.includes(origin)) {
+        callback(null, true);
+      } else {
+        callback(new Error("Not allowed by CORS"));
+      }
+    },
+    methods: ["GET", "POST", "PUT", "PATCH", "DELETE", "OPTIONS"],
+    allowedHeaders: ["Content-Type", "Authorization"],
+    credentials: true,
+  })
+);
 
 app.use(express.json());
 
@@ -42,11 +61,8 @@ const fireAlertRoutes = require("./routes/fireAlertRoutes");
 // =========================
 
 app.use("/api/users", userRoutes);
-
 app.use("/api/travels", travelRoutes);
-
 app.use("/api/expenses", expenseRoutes);
-
 app.use("/api/alerts", fireAlertRoutes);
 
 // =========================
