@@ -1,3 +1,3 @@
-const API_URL = import.meta.env.VITE_API_URL;
+export const API_URL = "https://resqhub-k8pc.onrender.com";
 
 export { API_URL };
