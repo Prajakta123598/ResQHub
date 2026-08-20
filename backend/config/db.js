@@ -8,9 +8,9 @@ const connectDB = async () => {
       serverSelectionTimeoutMS: 10000,
     });
 
-    console.log(`✅ MongoDB Connected: ${conn.connection.host}`);
+    console.log(`MongoDB Connected: ${conn.connection.host}`);
   } catch (error) {
-    console.error("❌ MongoDB connection full error:");
+    console.error("MongoDB connection full error:");
     console.error(error);
     process.exit(1);
   }

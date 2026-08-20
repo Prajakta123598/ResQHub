@@ -1,5 +1,7 @@
 const asyncHandler = require("express-async-handler");
+
 const User = require("../models/User");
+
 const jwt = require("jsonwebtoken");
 
 const generateToken = (id) => {
@@ -33,7 +35,7 @@ const registerUser = asyncHandler(async (req, res) => {
     role: role || "user",
   });
 
-  console.log("USER CREATED:", user);
+  console.log("USER CREATED:", user.email);
 
   res.status(201).json({
     success: true,
@@ -49,18 +51,18 @@ const registerUser = asyncHandler(async (req, res) => {
 const loginUser = asyncHandler(async (req, res) => {
   const { email, password } = req.body;
 
-  console.log("LOGIN REQUEST:", req.body);
+  console.log("LOGIN REQUEST:", { email });
 
   const user = await User.findOne({ email });
 
   if (!user) {
     console.log("User not found");
+
     res.status(401);
     throw new Error("Invalid email or password");
   }
 
   console.log("User Found:", user.email);
-  console.log("Stored Password:", user.password);
 
   const isMatch = await user.matchPassword(password);
 
@@ -87,11 +89,13 @@ const getUserProfile = asyncHandler(async (req, res) => {
 
 const getUsers = asyncHandler(async (req, res) => {
   const users = await User.find().select("-password");
+
   res.json(users);
 });
 
 const deleteUser = asyncHandler(async (req, res) => {
   await User.findByIdAndDelete(req.params.id);
+
   res.json({
     success: true,
     message: "User deleted",
